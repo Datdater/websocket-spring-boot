@@ -13,12 +13,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").withSockJS();
+        registry.addEndpoint("/gs-guide-websocket");
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/app"); //client send message to destination /app/
-        registry.enableSimpleBroker("/all"); //system enable simple broker destination /topic/
+        registry.enableSimpleBroker("/topic"); //system enable simple broker destination /topic/
     }
 }

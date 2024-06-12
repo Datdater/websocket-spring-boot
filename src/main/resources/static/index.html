@@ -1,71 +1,52 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
-    <script type="text/javascript">
-        var stompClient = null;
-        var privateStompClient = null;
-
-        var socket = new SockJS('/ws');
-        stompClient = Stomp.over(socket);
-        stompClient.connect({}, function(frame) {
-            console.log(frame);
-            stompClient.subscribe('/all/messages', function(result) {
-                show(JSON.parse(result.body));
-            });
-        });
-
-        socket = new SockJS('/ws');
-        privateStompClient = Stomp.over(socket);
-        privateStompClient.connect({}, function(frame) {
-            console.log(frame);
-            privateStompClient.subscribe('/user/specific', function(result) {
-                console.log(result.body)
-                show(JSON.parse(result.body));
-            });
-        });
-
-
-        function sendMessage() {
-            var text = document.getElementById('text').value;
-            stompClient.send("/app/application", {},
-                JSON.stringify({'text':text}));
-        }
-
-        function sendPrivateMessage() {
-            var text = document.getElementById('privateText').value;
-            var to = document.getElementById('to').value;
-            stompClient.send("/app/private", {},
-                JSON.stringify({'text':text, 'to':to}));
-        }
-
-        function show(message) {
-            var response = document.getElementById('messages');
-            var p = document.createElement('p');
-            p.innerHTML= "message: "  + message.text;
-            response.appendChild(p);
-        }
-    </script>
+    <title>Hello WebSocket</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="/main.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+    <script src="/app.js"></script>
 </head>
 <body>
-<div>
-    <div>
-        <button id="sendMessage" onclick="sendMessage();">Send</button>
-        <input type="text" id="text" placeholder="Text"/>
+<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
+    enabled. Please enable
+    Javascript and reload this page!</h2></noscript>
+<div id="main-content" class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="connect">WebSocket connection:</label>
+                    <button id="connect" class="btn btn-default" type="submit">Connect</button>
+                    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="name">What is your name?</label>
+                    <input type="text" id="name" class="form-control" placeholder="Your name here...">
+                </div>
+                <button id="send" class="btn btn-default" type="submit">Send</button>
+            </form>
+        </div>
     </div>
-    <br />
-    <div>
-        <button id="sendPrivateMessage" onclick="sendPrivateMessage();">Send Private</button>
-        <input type="text" id="privateText" placeholder="Private Message"/>
-        <input type="text" id="to" placeholder="To"/>
+    <div class="row">
+        <div class="col-md-12">
+            <table id="conversation" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Greetings</th>
+                </tr>
+                </thead>
+                <tbody id="greetings">
+                </tbody>
+            </table>
+        </div>
     </div>
-    <br />
-    <br />
-    <br />
-
-    <div id="messages"></div>
-
 </div>
-
 </body>
 </html>
