@@ -22,7 +22,6 @@ function connect(event) {
     if(username) {
         usernamePage.classList.add('hidden');
         chatPage.classList.remove('hidden');
-
         var socket = new SockJS('/ws');
         stompClient = Stomp.over(socket);
 
