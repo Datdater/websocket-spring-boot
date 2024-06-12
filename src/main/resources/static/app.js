@@ -1,5 +1,5 @@
 const stompClient = new StompJs.Client({
-    brokerURL: 'ws://websocket-spring-boot-production.up.railway.app/gs-guide-websocket'
+    brokerURL: 'wss://websocket-spring-boot-production.up.railway.app/gs-guide-websocket'
 });
 
 stompClient.onConnect = (frame) => {
