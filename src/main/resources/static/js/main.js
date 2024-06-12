@@ -23,8 +23,9 @@ function connect(event) {
         usernamePage.classList.add('hidden');
         chatPage.classList.remove('hidden');
 
-        var socket = new SockJS('/ws');
-        stompClient = Stomp.over(socket);
+        const stompClient = new StompJs.Client({
+            brokerURL: 'ws://websocket-spring-boot-production.up.railway.app/ws'});
+
 
         stompClient.connect({}, onConnected, onError);
     }
